@@ -25,8 +25,8 @@ placeNeato(pose(1), pose(2),cos(pose(3)),sin(pose(3)),0.05);
 pause(0.5);
 
 raw_vel = rospublisher('raw_vel');
-encoders = rossubscriber('encoders');
-% imu = rospublisher('imu');
+encoders = rospublisher('encoders');
+encoders = rospublisher('encoders');
 
 setWheelVel(raw_vel, 0.2, 0.2)
 t = 0;
@@ -37,11 +37,20 @@ rostic;
 while t<5
     t = rostoc();
     t_delta = t-t_prev;
-    enc_current = readEncoders(encoders);
-    enc_delta = enc_current - enc_last;
-    pose = updateOdometry(pose, enc_delta, t_delta);
-%     pose = updateOdometryIMU(pose, enc_delta, t_delta, imu);
+    enc_data = readEncoders(encoders);
+    enc_delta = enc_data - enc_last;
+    pose = updateOdometry(enc_delta);
+    pose = updateOdometryIMU(enc_delta, imu);
+    v_wheels = enc_delta/t_delta;
+    v = mean(v_wheels);
+    w = (v_wheels(2)-v_wheels(1))/0.235;
+    [imuMsg,status,statustext] = receive(imu,10);
+    heading = quat2eul([imuMsg.Orientation.X, imuMsg.Orientation.Y, imuMsg.Orientation.Z, imuMsg.Orientation.W]);
 
+    pose(1) = pose(1)+v(1)*cos(pose(3))*t_delta;
+    pose(2) = pose(2)+v(1)*sin(pose(3))*t_delta;
+    pose(3) = pose(3)+w*t_delta;
+%     pose(3) = heading(3);
 
     enc_last = enc_current;
     t_prev = t;
