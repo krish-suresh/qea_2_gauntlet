@@ -6,7 +6,7 @@ rosinitIfNotActive();
 % data = readmatrix("data.txt");
 
 
-SCAN_RATE = 1; % Hz
+SCAN_RATE = 0.25; % Hz
 
 pose = [0,0,0];
 placeNeato(pose(1), pose(2),cos(pose(3)),sin(pose(3)),0.05);
@@ -17,13 +17,13 @@ encoders = rossubscriber('encoders');
 scan = rossubscriber('/scan');
 % imu = rospublisher('imu');
 
-setWheelVel(raw_vel, 0.2, 0.1)
+setWheelVel(raw_vel, 0.2, 0.2)
 room_data = [];
 t = 0;
 t_prev = 0;
 last_scan_time = 0;
 enc_last = readEncoders(encoders);
-
+clf
 rostic;
 while t<5
     t = rostoc();
@@ -42,18 +42,4 @@ while t<5
 end
 stopRobot(raw_vel);
 
-circleTol = 0.01;
-[lines,unfitData, hasCircle, circle, circlePoints] = detectObjectsRANSAC(room_data,0.03, 1000, 0.3, circleTol, 1000, 0.25);
-clf
-hold on;
-% scatter(dpata(:,1), data(:,2));
-
-
-% plotCircle(circle(1),circle(2), 0.25);
-for i=1:(size(lines, 2)/2)
-    plot(lines(:, i*2-1), lines(:, i*2))
-end
-scatter(unfitData(:,1), unfitData(:,2));
-plot(circle(1),circle(2), "o")
-plotCircle(circle(1),circle(2),0.25);
-axis equal;
+plotRoom(room_data)
