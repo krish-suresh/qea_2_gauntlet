@@ -122,6 +122,27 @@ for top = 1
 end
 walls = .2 .* t;
 
+%% function for the walls in gauntlet
+
+function p = potentialfield(startpoint,endpoint)
+    deltay = startpoint(:,2) - endpoint(:,2);
+    deltax = startpoint(:,1) - endpoint(:,1);
+    slope = deltay ./ deltax;
+    intercept = startpoint(:,1) - (slope .* startpoint(:,2));
+    values = [];
+    for j = startpoint(:,1):.1:endpoint(:,1)
+        row = j * 10;
+        output = (slope .* j) + intercept;
+        values(row,1) = j;
+        values(row,2) = output;
+    end
+    for index = 1:length(values)
+        [x,y]=meshgrid(-5:0.3:5,-5:0.3:5);
+        equation = equation + log(sqrt((x-(values(index,1))).^2+(y-(values(index,1))).^2));
+    end
+end
+
+
 
 %% final destination goal
 figure;
@@ -142,6 +163,31 @@ axis equal
 
 % define obsticles and walls as lines
 % define goal as point
+
+
+%% different method
+% figure;
+% [x1,y1]=meshgrid(-1.5:0.05:2.5,-3.5:0.05:0.5);
+% [X2,Y2] = meshgrid(-1.5:0.5:2.5,-3.5:0.5:0.5);
+% % v = log(sqrt(x.^2+y.^2)) - log(sqrt((x-1).^2+(y-2).^2));
+% % %contour(x,y,v,'k','ShowText','On')
+% % surf(x,y,v)
+% % axis equal
+% syms x y
+% sink1 = log(sqrt((x-1.41).^2+(y+2).^2));
+% sink2 = log(sqrt((x-1).^2+(y+0.7).^2));
+% sink3 = log(sqrt((x+0.25).^2+(y+1).^2));
+% source = log(sqrt((x-0.75).^2+(y+2.5).^2));
+% f = 1.3*sink1 + 1.3*sink2 + 1.3*sink3 - 3*source;
+% %contour(x,y,f,'k','ShowText','On')
+% axis equal
+% % Find the gradient of the function
+% g = gradient(f,[x,y]);
+% gx = subs(g(1), [x,y],{X2,Y2});
+% gy = subs(g(2), [x,y],{X2,Y2});
+% %contour(x1,y1,subs(f,[x,y],{x1,y1}),50)
+% quiver(X2,Y2,gx,gy)
+% axis equal
 
 
 
