@@ -1,4 +1,4 @@
-function room_data = scanToGlobalFrame(scan,pose, room_data)
+function new_data = scanToGlobalFrame(scan,pose)
     theta_range = deg2rad([0:359]');
         
     origin_of_lidar_frame = [-0.084 0];
@@ -12,6 +12,6 @@ function room_data = scanToGlobalFrame(scan,pose, room_data)
     data_in_global_frame = [1 0 pose(1);
                                0 1 pose(2);
                                0 0 1]*rotatedPoints;
-    room_data = [room_data; data_in_global_frame(1:2,:)'];
+    new_data = data_in_global_frame(1:2,:)';
 end
 
