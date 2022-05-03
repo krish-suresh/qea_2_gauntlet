@@ -11,7 +11,7 @@ function [lines,unfitData] = detectLinesRANSAC(data,lineTol, lineIterations, lin
     while count < 10
         [~, outliers, endpoints, hasLine] = ransacLine(data, lineTol, lineIterations, lineMaxGap, lineMinLen);
         if ~hasLine
-            count = count +1;
+            count = count +1
             continue;
         end
         count = 0;

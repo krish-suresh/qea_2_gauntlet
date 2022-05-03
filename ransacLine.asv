@@ -11,7 +11,7 @@ function [bestInlierSet,bestOutlierSet,bestEndPoints, hasLine] = ransacLine(poin
         while true
             candidates = datasample(points, 2, 'Replace', true);
             v=(candidates(1,:)-candidates(2,:))';
-            if norm(v) ~=0
+            if norm(v) ~=0 %> 0.05 && norm(v) < 1
                 break;
             end
         end
