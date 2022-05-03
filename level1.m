@@ -121,7 +121,18 @@ for top = 1
     end
 end
 walls = .2 .* t;
-k = source1 + source2 + source3 - walls;
+
+
+%% final destination goal
+figure;
+[x,y]=meshgrid(-3:0.05:3,-3:0.05:3);
+goal = 0;
+for theta = 0:0.1:2*pi
+a = .25.*cos(theta)+.75;
+b = .25.*sin(theta)-2.5;
+goal = goal - log(sqrt((x-a).^2 + (y-b).^2));
+end
+k = source1 + source2 + source3 - walls - goal;
 k = .03 .* k;
 %contour(x,y,k,'k','ShowText','on')
 figure;
