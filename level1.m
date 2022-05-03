@@ -1,19 +1,5 @@
 %rosinitIfNotActive();
-% figure;
-% [x,y]=meshgrid(-5:0.3:5,-5:0.3:5);
-% v = 1.3 .* log(sqrt((x-1.41).^2+(y+2).^2)) + 1.3 .* log(sqrt((x+.25).^2+(y+1).^2)) + 1.3 .* log(sqrt((x-1).^2+(y+.7).^2)) - 3 .* log(sqrt((x-.75).^2+(y+2.5).^2));
-% contour(x,y,v,'k','ShowText','On')
-% %surf(x,y,v)
-% axis equal
-% g = gradient(v,[x,y]);
-% figure;
-% [x,y]=meshgrid(-3:0.05:3,-3:0.05:3);
-% fx = (x-1.41)./((x-1.41).^2+(y+2).^2) - (x+.25)./((x+.25).^2+(y+1).^2) - (x-1)./((x-1).^2+(y+.7).^2) + (x-.75)./((x-.75).^2+(y+2.5).^2);
-% fy = (x-1.41)./((x-1.41).^2+(y+2).^2) - (x+.25)./((x+.25).^2+(y+1).^2) - (x-1)./((x-1).^2+(y+.7).^2) + (x-.75)./((x-.75).^2+(y+2.5).^2);
-% quiver(x,y,fx,fy)
-% axis equal
-
-
+%% center of objects
 figure;
 [x1,y1]=meshgrid(-1.5:0.05:2.5,-3.5:0.05:0.5);
 [X2,Y2] = meshgrid(-1.5:0.5:2.5,-3.5:0.5:0.5);
@@ -86,10 +72,6 @@ for gg = -.25:0.01:.1035533906
     end
 end
 source2 = .006 .* v;
-% %contour(x,y,f,'k','ShowText','On')
-% figure;
-% surf(x,y,k)
-% axis equal
 
 % third box
 v = 0;
@@ -114,9 +96,34 @@ for ggg = 1:0.01:1.353553391
     end
 end
 source3 = .006 .* v;
-k = source1 + source2 + source3;
+%% walls
+
+[x,y]=meshgrid(-3:0.05:3,-3:0.05:3);
+t = 0;
+for left = -1.5
+    for up = -3.37:0.01:1
+    t = t - log(sqrt((x-left).^2 + (y-up).^2));
+    end
+end
+for right = 2.5
+    for up = -3.37:0.01:1
+    t = t - log(sqrt((x-right).^2 + (y-up).^2));
+    end
+end
+for bottom = -3.37
+    for side = -1.5:0.01:2.5
+    t = t - log(sqrt((x-side).^2 + (y-bottom).^2));
+    end
+end
+for top = 1
+    for side = -1.5:0.01:2.5
+    t = t - log(sqrt((x-side).^2 + (y-top).^2));
+    end
+end
+walls = .2 .* t;
+k = source1 + source2 + source3 - walls;
 k = .03 .* k;
-%contour(x,y,v,'k','ShowText','On')
+%contour(x,y,k,'k','ShowText','on')
 figure;
 surf(x,y,k)
 axis equal
