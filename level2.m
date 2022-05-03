@@ -6,7 +6,7 @@ rosinitIfNotActive();
 % data = readmatrix("data.txt");
 
 
-SCAN_RATE = 0.25; % Hz
+SCAN_RATE = 0.1; % s
 
 pose = [0,0,0];
 poses = pose;
@@ -18,13 +18,12 @@ encoders = rossubscriber('encoders');
 scan = rossubscriber('/scan');
 % imu = rospublisher('imu');
 
-setWheelVel(raw_vel, 0.2, 0.2)
+setWheelVel(raw_vel, 0.15, 0.07)
 room_data = [];
 t = 0;
 t_prev = 0;
 last_scan_time = 0;
 enc_last = readEncoders(encoders);
-clf
 rostic;
 while t<5
     t = rostoc();
@@ -35,10 +34,11 @@ while t<5
 %     pose = updateOdometryIMU(pose, enc_delta, t_delta, imu);
     if t-last_scan_time > SCAN_RATE
         scan_data = readScan(scan);
-        new_data = scanToGlobalFrame(scan_data,pose);
-        filtered_new_data = filterAroundPoint(new_data, [0.75, -2.5], 0.3);
+        filtered_new_data = scanToGlobalFrame(scan_data,pose);
+        filtered_new_data = filterAroundPoint(filtered_new_data, [0.75, -2.5], 0.35);
 %         filtered_new_data = filterClosePointsKnn(room_data, filtered_new_data, 0.05);
-        room_data = [room_data; filtered_new_data]; %#ok<AGROW> 
+%         room_data = [room_data; filtered_new_data]; %#ok<AGROW> 
+        room_data = uniquetol([room_data;filtered_new_data], 0.01, 'ByRows', true);
         last_scan_time = t;
     end
     enc_last = enc_current;

@@ -1,6 +1,7 @@
 function filtered_new_data = filterClosePointsKnn(room_data,new_data, d)
+    
     if isempty(room_data)
-        filtered_new_data = new_data;
+        room_data = new_data;
         return;
     end
     idx = knnsearch(room_data, new_data);
@@ -11,6 +12,5 @@ function filtered_new_data = filterClosePointsKnn(room_data,new_data, d)
             filtered_new_data = [filtered_new_data; new_data(i, :)];
         end
     end
-%     filtered_new_data = new_data; % TODO remove points within d range
 end
 

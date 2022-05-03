@@ -11,7 +11,7 @@ function [bestInlierSet,bestOutlierSet,bestEndPoints, hasLine] = ransacLine(poin
         while true
             candidates = datasample(points, 2, 'Replace', true);
             v=(candidates(1,:)-candidates(2,:))';
-            if norm(v) ~=0
+            if norm(v) ~=0 
                 break;
             end
         end
@@ -20,7 +20,7 @@ function [bestInlierSet,bestOutlierSet,bestEndPoints, hasLine] = ransacLine(poin
         diffs = points - candidates(2,:);
         orthdists=diffs*orthv_unit;
         inliers=abs(orthdists) < lineTol;
-        biggestGap = mean(diff(sort(diffs(inliers,:)*v/norm(v))));
+        biggestGap = max(diff(sort(diffs(inliers,:)*v/norm(v))));
         projectedCoordinate = diffs(inliers, :)*v/norm(v);
         endPoints = [min(projectedCoordinate); max(projectedCoordinate)]*v'/norm(v) + repmat(candidates(2, :), [2, 1]);
         if biggestGap < lineMaxGap  && sum(inliers) > size(bestInlierSet,1) && pdist(endPoints,'euclidean') > lineMinLen

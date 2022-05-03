@@ -12,7 +12,7 @@ function [lines,unfitData, hasCircle, circle, circlePoints] = detectObjectsRANSA
     circle = [];
     circlePoints = [];
     while count < 10
-        [~, outliers, endpoints, hasLine] = ransacLine(data, lineTol, lineIterations, lineMaxGap);
+        [~, outliers, endpoints, hasLine] = ransacLine(data, lineTol, lineIterations, lineMaxGap, 0.25);
         if ~hasLine
             count = count +1;
             continue;
