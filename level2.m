@@ -6,7 +6,8 @@ rosinitIfNotActive();
 % data = readmatrix("data.txt");
 
 
-SCAN_RATE = 0.1; % s
+SCAN_INT = 0.1; % s
+PLOT_INT = 1;
 
 pose = [0,0,0];
 poses = pose;
@@ -23,6 +24,7 @@ room_data = [];
 t = 0;
 t_prev = 0;
 last_scan_time = 0;
+last_plot_time = 0;
 enc_last = readEncoders(encoders);
 rostic;
 while t<5
@@ -32,19 +34,25 @@ while t<5
     enc_delta = enc_current - enc_last;
     pose = updateOdometry(pose, enc_delta, t_delta);
 %     pose = updateOdometryIMU(pose, enc_delta, t_delta, imu);
-    if t-last_scan_time > SCAN_RATE
+    if t-last_scan_time > SCAN_INT
         scan_data = readScan(scan);
         filtered_new_data = scanToGlobalFrame(scan_data,pose);
-        filtered_new_data = filterAroundPoint(filtered_new_data, [0.75, -2.5], 0.35);
+%         filtered_new_data = filterAroundPoint(filtered_new_data, [0.75, -2.5], 0.35);
 %         filtered_new_data = filterClosePointsKnn(room_data, filtered_new_data, 0.05);
 %         room_data = [room_data; filtered_new_data]; %#ok<AGROW> 
-        room_data = uniquetol([room_data;filtered_new_data], 0.01, 'ByRows', true);
+        room_data = uniquetol([room_data;filtered_new_data], 0.005, 'ByRows', true);
         last_scan_time = t;
     end
+    
+    if t-last_plot_time > SCAN_INT
+        plotRoom(room_data, poses);
+        last_plot_time = t;
+    end
+
     enc_last = enc_current;
     t_prev = t;
     poses = [poses;pose]; %#ok<AGROW> 
 end
 stopRobot(raw_vel);
 
-plotRoom(room_data)
+

@@ -4,7 +4,7 @@ function [bestInlierSet,bestOutlierSet,bestEndPoints, hasLine] = ransacLine(poin
     bestOutlierSet = zeros(0,2);
     bestEndPoints = zeros(0,2);
     hasLine = false;
-    if size(points, 1) == 0
+    if size(points, 1) < 3
         return;
     end
     for k=1:lineIterations
