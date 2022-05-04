@@ -1,0 +1,3 @@
+rosinitIfNotActive();
+
+data = preScanRoom();

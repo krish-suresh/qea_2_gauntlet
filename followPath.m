@@ -1,7 +1,6 @@
 function followPath(vel_topic,pose, M, time, start_angle)
-
-    turnToAngle(vel_topic, pose(3), start_angle, 0.1);
-    return;
+    track_width = 0.235;
+    turnToAngle(vel_topic, pose(3), start_angle, 0.05);
     time_delta = time(2:end,:)-time(1:end-1,:);
     T = (M(2:end,:)-M(1:end-1,:))./time_delta;
     T_hat = T./vecnorm(T')';
@@ -11,11 +10,12 @@ function followPath(vel_topic,pose, M, time, start_angle)
     T_hat = [T_hat,zeros(size(T_hat,1),1)];
     B = cross(N',T_hat(2:end, :)')';
     speed = vecnorm(T')';
+    speed = speed(2:end);
     omega = -B(:,3);
-
+    time = time(3:end);
     rostic;
     while true
-        t = rostoc();
+        t = rostoc()
         if t > time(end)
             break
         end
