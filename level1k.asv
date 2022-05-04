@@ -1,0 +1,39 @@
+x_range = -2:0.05:3;
+y_range = -4:0.05:1.5;
+
+[X,Y]=meshgrid(x_range,y_range);
+f = X.*0;
+corners = [-1.5, -3.37;
+2.5, -3.37;
+2.5, 1;
+-1.5, 1;];
+for i=1:4
+    f = addLine(f,x_range,y_range,[corners(i,:);corners((mod(i,4)+1),:)],50);
+end
+
+objects = [-0.25, -1;1,-0.7;1.41,-2];
+for i=1:size(objects,1)
+    f = addSource(f,x_range,y_range,objects(i,:));
+end
+
+f = addSink(f,x_range,y_range,[0.75,-2.5]);
+
+[px,py] = gradient(f);
+
+contour(X,Y,f, 100)
+
+plot(0,0,'*');
+tol = 0.01;
+n = 0;
+n_max = 50;
+r = [0;0];
+lambda = 0.03;
+delta = 1.1;
+while n<n_max 
+    [val,idx]=min(abs(x_range-r(1)));
+    grad = subs(gradient(f), {x,y},{r(1),r(2)});
+    r = r + lambda*grad;
+    plot(r(1),r(2),'r*');
+    lambda = lambda*delta;
+    n = n+1;
+end
