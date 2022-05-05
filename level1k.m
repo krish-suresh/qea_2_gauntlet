@@ -31,7 +31,7 @@ f = addSink(f,x_range,y_range,sink_point, 4);
 
 [px,py] = gradient(f);
 
-[t,M, start_angle] = continuousGradPath(x_range,y_range,px,py,[0,0], sink_point, 0.5);
+[t,M, start_angle] = continuousGradPath(x_range,y_range,px,py,[0,0], sink_point, 0.5, 0.4);
 M_discrete = discreteGradPath(x_range,y_range,px,py,[0,0], sink_point,100,0.3,1.1);
 
 if visualize

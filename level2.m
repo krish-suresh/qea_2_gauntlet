@@ -2,9 +2,7 @@ rosinitIfNotActive();
 
 % data = preScanRoom();
 
-
 % data = readmatrix("data.txt");
-
 
 SCAN_INT = 0.1; % s
 PLOT_INT = 1;
