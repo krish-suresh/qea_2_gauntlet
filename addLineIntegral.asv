@@ -1,0 +1,16 @@
+function out = addLineIntegral(equation,x_range, y_range, endPoints, scale)
+    line = zeros([length(y_range),length(x_range)]);
+    dist = pdist(endPoints,'euclidean');
+    if (endPoints(2,1)-endPoints(1,1)) ~= 0
+        slope = (endPoints(2,2)-endPoints(1,2)) ./ (endPoints(2,1)-endPoints(1,1));
+        intercept = endPoints(1,2) - (slope .* endPoints(1,1));
+        [x,y]=meshgrid(x_range,y_range);
+        fun = @(a) log(sqrt((x-a).^2+(y-(slope*a + intercept)).^2));
+        line = integral(fun, endPoints(1,1),endPoints(2,1), )./dist;
+    else
+        b = linspace(endPoints(1,2), endPoints(2,2), n);
+        a = repmat(endPoints(1,1),n,1);
+    end
+
+    out = (line.*scale) + equation;
+end

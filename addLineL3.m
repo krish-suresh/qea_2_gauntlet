@@ -1,0 +1,21 @@
+function out = addLineL3(equation,x_range, y_range, endPoints, n, scale)
+    dist = pdist(endPoints,'euclidean');
+    if dist > 2
+        dist = dist.^3;
+    end
+    if (endPoints(2,1)-endPoints(1,1)) ~= 0
+        slope = (endPoints(2,2)-endPoints(1,2)) ./ (endPoints(2,1)-endPoints(1,1));
+        intercept = endPoints(1,2) - (slope .* endPoints(1,1));
+        a = linspace(endPoints(1,1), endPoints(2,1), n);
+        b = slope.*a + intercept;
+    else
+        b = linspace(endPoints(1,2), endPoints(2,2), n);
+        a = repmat(endPoints(1,1),n,1);
+    end
+    line = zeros([length(y_range),length(x_range)]);
+    for i = 1:length(a)
+        [x,y]=meshgrid(x_range,y_range);
+        line = line - log(sqrt((x-(a(i))).^2+(y-(b(i))).^2)).*(1/n);
+    end
+    out = (line.*scale.*dist) + equation;
+end
