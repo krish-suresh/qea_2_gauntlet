@@ -1,7 +1,7 @@
 rosinitIfNotActive();
 vel_topic = rospublisher("raw_vel");
 
-visualize = false;
+visualize = true;
 x_range = linspace(-2,3, 500);
 y_range = linspace(-4,1.5, 500);
 stopRobot(vel_topic);
@@ -14,20 +14,20 @@ corners = [-1.5, -3.37;
 2.5, 1;
 -1.5, 1;];
 for i=1:4
-    f = addLine(f,x_range,y_range,[corners(i,:);corners((mod(i,4)+1),:)],50, 5);
+    f = addLineFlat(f,x_range,y_range,[corners(i,:);corners((mod(i,4)+1),:)],50, 10,  0.1, 1.5);
 end
 
-f = addSource(f,x_range,y_range,[-0.25, -1], 0.6);
-f = addSource(f,x_range,y_range,[1,-0.7], 0.4);
-f = addSource(f,x_range,y_range,[1.41,-2], 0.4);
-
-for i=1:size(corners,1)
-    f = addSource(f,x_range,y_range,corners(i,:), 2);
-end
+f = addSource(f,x_range,y_range,[-0.25, -1], 3);
+f = addSource(f,x_range,y_range,[1,-0.7], 3);
+f = addSource(f,x_range,y_range,[1.41,-2], 3);
+% 
+% for i=1:size(corners,1)
+%     f = addSource(f,x_range,y_range,corners(i,:), 2);
+% end
 
 sink_point = [0.75,-2.5];
 
-f = addSink(f,x_range,y_range,sink_point, 4);
+f = addSink(f,x_range,y_range,sink_point, 40);
 
 [px,py] = gradient(f);
 

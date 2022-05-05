@@ -22,11 +22,11 @@ end
 
 if hasCircle
     sink_point = circle; 
-    f = addSink(f,x_range,y_range,sink_point, 10);
+    f = addSink(f,x_range,y_range,sink_point, 40);
 end
 
 for i=1:(size(lines, 2)/2)
-    f = addLinePropToLen(f,x_range,y_range,[lines(:, i*2-1),lines(:, i*2)],50, 1);
+    f = addLineFlat(f,x_range,y_range,[lines(:, i*2-1),lines(:, i*2)],50, 1, 0.021, 1.2);
 end
 
 [px,py] = gradient(f);
@@ -60,11 +60,12 @@ if hasCircle
     if ~isempty(circlePoints)
     scatter(circlePoints(:,1), circlePoints(:,2), "filled")
     end
+    plot(circle(1), circle(2),"r*")
     plotCircle(circle(1), circle(2), 0.25);
 end
 axis equal;
 hold off;
-% stopRobot(vel_topic);
-% placeNeato(0,0,1,0,0.1);
-% pause(1);
-% followPath(vel_topic, [0,0,0], M, t, start_angle);
+stopRobot(vel_topic);
+placeNeato(0,0,1,0,0.1);
+pause(1);
+followPath(vel_topic, [0,0,0], M, t, start_angle);

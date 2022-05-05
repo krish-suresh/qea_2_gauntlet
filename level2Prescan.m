@@ -18,16 +18,17 @@ end
 data = filterAroundPoint(data,[0.75, -2.5],0.3);
 
 
-[lines,unfitData] = detectLinesRANSAC(data,0.05, 500, 0.1, 0.25);
+[lines,unfitData] = detectLinesRANSAC(data,0.08, 1000, 0.1, 0.1);
 
 
 sink_point = [0.75,-2.5];
 
-f = addSink(f,x_range,y_range,sink_point, 10);
+f = addSink(f,x_range,y_range,sink_point, 30);
 
 for i=1:(size(lines, 2)/2)
-    f = addLinePropToLen(f,x_range,y_range,[lines(:, i*2-1),lines(:, i*2)],50, 1);
+    f = addLineFlat(f,x_range,y_range,[lines(:, i*2-1),lines(:, i*2)],50, 1, 0.021, 1.5);
 end
+
 
 [px,py] = gradient(f);
 
