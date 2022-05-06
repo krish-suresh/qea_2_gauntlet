@@ -67,9 +67,11 @@ end
 
 
 P = shortestpath(G,mat2str(bestEnd),mat2str(start));
+waypoints = bestEnd;
 for i=1:length(P)-1
     n1 = eval(cell2mat(P(i)));
     n2 = eval(cell2mat(P(i+1)));
+    waypoints = [waypoints;n2];
     plot([n1(1), n2(1)], [n1(2), n2(2)], 'r-o');
 end
 

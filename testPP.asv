@@ -1,0 +1,21 @@
+rosinitIfNotActive
+
+raw_val = rospublisher("raw_vel");
+encoders = rossubscriber("encoders");
+controller = controllerPurePursuit;
+
+controller.Waypoints = waypoints;
+controller.MaxAngularVelocity = 1;
+controller.LookaheadDistance = 1;
+controller.DesiredLinearVelocity = 0.2;
+pose = [0,0,0];
+d
+
+rostic;
+while t < 10
+    t = rostoc();
+    [v,w] = controller(pose);
+    vL = ;
+    vR = ;
+    setWheelVel(raw_val, vL, vR);
+end
