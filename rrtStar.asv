@@ -1,12 +1,10 @@
-function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNodes,maxDist, searchRadius)
-    tic;
+function [reachedGoal,pathToGoal, tree] = rrtStar(map,start,goal,goalThresh,maxNodes,maxDist, searchRadius)
     cost = containers.Map('KeyType','char','ValueType','double');
     G = digraph();
     G = addnode(G,mat2str(start));
     cost(mat2str(start)) = 0;
     bestDistToGoal = inf;
     bestEnd = start;
-    reachedGoal = false;
     for n=1:maxNodes
         randomNode = [randWithinRange(map.XWorldLimits), randWithinRange(map.YWorldLimits)];
         nearestNode = start;
@@ -77,13 +75,6 @@ function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNode
                 end
             end
         end
-    end
-    P = shortestpath(G,mat2str(start),mat2str(bestEnd));
-    pathToGoal = start;
-    for i=1:length(P)-1
-        n1 = eval(cell2mat(P(i)));
-        n2 = eval(cell2mat(P(i+1)));
-        pathToGoal = [pathToGoal;n2];
     end
 end
 
