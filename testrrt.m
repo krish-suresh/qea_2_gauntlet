@@ -1,22 +1,25 @@
-mapData = ones(200,400);
+mapData = ones(408,445);
 
-mapData(5:end-4,5:end-4) = 0;
+image = imread('occupancymap.png');
+grayimage = rgb2gray(image);
+bwimage = grayimage < 0.5;
 
-mapData(1:100,150:155) = 1;
+mapData(5:end-4,5:end-4) = bwimage;
 
 map = binaryOccupancyMap(mapData,'Resolution',100);
+map_original = binaryOccupancyMap(mapData,'Resolution',100);
 inflate(map, 0.1)
 
-start = [1,1];
-goal = [3,1];
-goalThresh = 0.1;
-maxNodes = 30;
-maxDist = 0.5;
-searchRadius = 0.3;
-G = graph();
+start = [4,3];
+goal = [1.5,2];
+goalThresh = 0.2;
+maxNodes = 100;
+maxDist = 0.3;
+searchRadius = 0.1;
+G = digraph();
 G = addnode(G,mat2str(start));
-
-% TODO randomly sample goal node
+bestDistToGoal = inf;
+bestEnd = start;
 for n=1:maxNodes
     randomNode = [randWithinRange(map.XWorldLimits), randWithinRange(map.YWorldLimits)];
     nearestNode = start;
@@ -39,15 +42,19 @@ for n=1:maxNodes
         continue;
     end
     G = addnode(G,mat2str(newNode));
-    G = addedge(G,mat2str(nearestNode),mat2str(newNode));
-    if pdist([randomNode;node],'euclidean') < goalThresh
+    G = addedge(G,mat2str(newNode),mat2str(nearestNode)); % TODO add search radius check
+    distToGoal = pdist([newNode;goal],'euclidean');
+    if bestDistToGoal > distToGoal
+        bestEnd = newNode;
+        bestDistToGoal = distToGoal;
+    end
+    if distToGoal < goalThresh
         break;
     end
 end
-
 clf
 hold on;
-show(map);
+show(map_original);
 plot(start(1),start(2),"r*");
 plot(goal(1),goal(2),"g*");
 
@@ -56,6 +63,14 @@ for i=1:height(G.Edges)
     n1 = eval(cell2mat(edge(1)));
     n2 = eval(cell2mat(edge(2)));
     plot([n1(1), n2(1)], [n1(2), n2(2)], 'b-o');
+end
+
+
+P = shortestpath(G,mat2str(bestEnd),mat2str(start));
+for i=1:length(P)-1
+    n1 = eval(cell2mat(P(i)));
+    n2 = eval(cell2mat(P(i+1)));
+    plot([n1(1), n2(1)], [n1(2), n2(2)], 'r-o');
 end
 
 axis padded
