@@ -7,12 +7,12 @@ inflate(map, 0.17)
 
 start = [0,0];
 goal = [0.75,-2.5];
-goalThresh = 0.4;
-maxNodes = 100;
-maxDist = 0.3;
+goalThresh = 0.45;
+maxNodes = 400;
+maxDist = 0.5;
 searchRadius = 0.4;
-% [reached, pathToGoal, G] = rrt(map,start,goal,goalThresh,maxNodes,maxDist);
-[reached, pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNodes,maxDist,searchRadius);
+
+[reached, pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNodes,maxDist,searchRadius, false);
 
 raw_val = rospublisher("raw_vel");
 encoders = rossubscriber("encoders");

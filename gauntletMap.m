@@ -1,5 +1,5 @@
 function map = gauntletMap()
-    image = imread('occupancymaprot.png');
+    image = imread('occupancymaprotgoalremoved.png');
     grayimage = rgb2gray(image);
     bwimage = grayimage < 0.5;
     

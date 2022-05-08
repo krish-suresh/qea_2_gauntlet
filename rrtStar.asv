@@ -92,19 +92,17 @@ function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNode
             pathToGoal = [pathToGoal;n2];
         end
         if visualize
-            plotPath(map,start,goal,G,pathToGoal)
+        plotPath(map,start,goal,G,pathToGoal)
         end
     end
 
-    
+    bestCostToGoal
     for i=1:height(G.Nodes)
         node = eval(cell2mat(G.Nodes{i,1}));
         dist = pdist([goal;node],'euclidean');
-        if goalThresh > dist && bestCostToGoal > cost(mat2str(node))
-            bestEnd = node
-            bestCostToGoal = cost(mat2str(node));
+        if goalThresh > dist
+            nearNodes = [nearNodes;node];
         end
     end
-    plotPath(map,start,goal,G,pathToGoal)
 end
 
