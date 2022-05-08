@@ -34,7 +34,7 @@ function [reachedGoal,pathToGoal, G] = rrt(map,start,goal,goalThresh,maxNodes,ma
         end
         if distToGoal < goalThresh
             reachedGoal = true;
-            break;
+%             break;
         end
     end
 

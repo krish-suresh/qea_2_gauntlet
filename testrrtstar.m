@@ -1,20 +1,12 @@
-mapData = ones(408,445);
+map = gauntletMap();
+map_original = map;
+inflate(map, 0.15)
 
-image = imread('occupancymap.png');
-grayimage = rgb2gray(image);
-bwimage = grayimage < 0.5;
-
-mapData(5:end-4,5:end-4) = bwimage;
-
-map = binaryOccupancyMap(mapData,'Resolution',100);
-map_original = binaryOccupancyMap(mapData,'Resolution',100);
-inflate(map, 0.1)
-
-start = [4,3];
-goal = [1.5,2];
-goalThresh = 0.2;
-maxNodes = 200;
-maxDist = 0.3;
+start = [0,0];
+goal = [0.75,-2.5];
+goalThresh = 0.4;
+maxNodes = 400;
+maxDist = 0.5;
 searchRadius = 0.4;
 
 [reached, pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNodes,maxDist,searchRadius);

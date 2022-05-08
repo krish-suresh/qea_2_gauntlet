@@ -4,10 +4,11 @@ function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNode
     G = digraph();
     G = addnode(G,mat2str(start));
     cost(mat2str(start)) = 0;
-    bestDistToGoal = inf;
+    bestCostToGoal = inf;
     bestEnd = start;
     reachedGoal = false;
     for n=1:maxNodes
+        n
         randomNode = [randWithinRange(map.XWorldLimits), randWithinRange(map.YWorldLimits)];
         nearestNode = start;
         minDist = inf;
@@ -57,10 +58,10 @@ function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNode
         G = addedge(G,mat2str(optimalNode),mat2str(newNode), len);
         cost(mat2str(newNode)) = len + cost(mat2str(optimalNode));
         distToGoal = pdist([newNode;goal],'euclidean');
-        if bestDistToGoal > distToGoal
-            bestEnd = newNode;
-            bestDistToGoal = distToGoal;
-            if bestDistToGoal < goalThresh
+        if distToGoal < goalThresh
+            if bestCostToGoal > cost(mat2str(newNode))
+                bestEnd = newNode
+                bestCostToGoal = cost(mat2str(newNode));
                 reachedGoal = true;
             end
         end
