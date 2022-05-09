@@ -1,6 +1,7 @@
 function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNodes,maxDist, searchRadius, visualize)
     tic;
     cost = containers.Map('KeyType','char','ValueType','double');
+    map_original = gauntletMap();
     G = digraph();
     G = addnode(G,mat2str(start));
     cost(mat2str(start)) = 0;
@@ -92,7 +93,16 @@ function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNode
             pathToGoal = [pathToGoal;n2];
         end
         if visualize
-            plotPath(map,start,goal,G,pathToGoal)
+            for i=1:height(G.Nodes)
+                node = eval(cell2mat(G.Nodes{i,1}));
+                dist = pdist([goal;node],'euclidean');
+                if goalThresh > dist && bestCostToGoal > cost(mat2str(node))
+                    bestEnd = node;
+                    bestCostToGoal = cost(mat2str(node));
+                end
+            end
+            plotPath(map_original,start,goal,G,pathToGoal)
+            F(n) = getframe;
         end
     end
 
@@ -105,6 +115,12 @@ function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNode
             bestCostToGoal = cost(mat2str(node));
         end
     end
-    plotPath(map,start,goal,G,pathToGoal)
+    plotPath(map_original,start,goal,G,pathToGoal)
+    if visualize
+        writerObj = VideoWriter('rrtstar.mp4');
+        open(writerObj);
+        writeVideo(writerObj, F)
+        close(writerObj);
+    end
 end
 

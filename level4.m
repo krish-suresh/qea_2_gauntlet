@@ -1,7 +1,7 @@
 rosinitIfNotActive
 
 map = gauntletMap();
-map_original = map;
+map_original = gauntletMap();
 
 inflate(map, 0.17)
 
@@ -12,7 +12,7 @@ maxNodes = 400;
 maxDist = 0.5;
 searchRadius = 0.4;
 
-[reached, pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNodes,maxDist,searchRadius, false);
+% [reached, pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNodes,maxDist,searchRadius, false);
 
 raw_val = rospublisher("raw_vel");
 encoders = rossubscriber("encoders");
