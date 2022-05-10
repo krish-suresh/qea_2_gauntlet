@@ -30,8 +30,9 @@ function poses = followPath(vel_topic,pose, M, time, start_angle)
         pose = updateOdometry(pose, enc_delta, t_delta);
         poses = [poses;pose];
         [~,nearest_t]=min(abs(time-t));
-        vL = speed(nearest_t) - track_width/2*omega(nearest_t);
-        vR = speed(nearest_t) + track_width/2*omega(nearest_t);
+        w = omega(nearest_t)*1;
+        vL = speed(nearest_t) - track_width/2*w;
+        vR = speed(nearest_t) + track_width/2*w;
         setWheelVel(vel_topic,vL,vR);
         enc_last = enc_current;
         t_prev = t;

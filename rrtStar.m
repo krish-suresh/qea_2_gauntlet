@@ -102,7 +102,7 @@ function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNode
                 end
             end
             plotPath(map_original,start,goal,G,pathToGoal)
-            F(n) = getframe;
+%             F(n) = getframe;
         end
     end
 
@@ -116,11 +116,11 @@ function [reachedGoal,pathToGoal, G] = rrtStar(map,start,goal,goalThresh,maxNode
         end
     end
     plotPath(map_original,start,goal,G,pathToGoal)
-    if visualize
-        writerObj = VideoWriter('rrtstar.mp4');
-        open(writerObj);
-        writeVideo(writerObj, F)
-        close(writerObj);
-    end
+%     if visualize
+%         writerObj = VideoWriter('rrtstar.mp4');
+%         open(writerObj);
+%         writeVideo(writerObj, F)
+%         close(writerObj);
+%     end
 end
 
