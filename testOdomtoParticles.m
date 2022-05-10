@@ -1,11 +1,11 @@
 rosinitIfNotActive
 
-map = gauntletMapWithCircle;
+map = gauntletMap;
 
-number_of_particles = 400;
-particles = [];
-weights = [];
-i = 0;
+number_of_particles = 10;
+particles = [0,0,0];
+weights = [1/number_of_particles];
+i = 1;
 while i<number_of_particles
     new_particle = [randWithinRange(map.XWorldLimits), randWithinRange(map.YWorldLimits),randWithinRange([-pi,pi])];
     if checkOccupancy(map,new_particle(1:2))
@@ -44,22 +44,12 @@ while true
     poseDelta = getPoseDelta(pose, enc_delta, t_delta);
     pose = updateOdometry(pose, enc_delta, t_delta);
     [particles,weights] = applyOdom(particles,poseDelta,map, weights);
-    if t-last_filter_time > filter_interval
-        disp("scan")
-        stopRobot(raw_vel);
-        scan_data = readScan(scan);
-        weights = particleLikelihoods(particles,map, scan_data);
-        weights = normalizeWeights(weights);
-        particles = resampleParticles(particles,weights);
-        last_filter_time = rostoc;
-        setWheelVel(raw_vel,0.1,0.02);
-    end
-    if t-last_plot_time > 0.3
+    if t-last_plot_time > 0.1
         show(map); hold on
         plot(pose(1),pose(2),"r*")
         plot(particles(:,1),particles(:,2),"b."); hold off;
-        last_plot_time = rostoc;
+        last_plot_time = t;
     end
     enc_last = enc_current;
-    t_prev = rostoc;
+    t_prev = t;
 end

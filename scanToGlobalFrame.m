@@ -3,7 +3,7 @@ function new_data = scanToGlobalFrame(scan,pose)
     index=find(scan~=0);
     scan=scan(index);
     theta_range=theta_range(index);
-    index=find(scan<2);
+    index=find(scan<3);
     scan=scan(index);
     theta_range=theta_range(index);
 
